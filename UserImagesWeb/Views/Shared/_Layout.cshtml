@@ -30,6 +30,24 @@
         </nav>
     </header>
     <div class="container">
+        <div style="margin-left:auto">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div>@User.Identity.Name</div>
+                <form method="post" asp-controller="User" asp-action="Logout">
+                    <input type="submit" value="Logout" />
+                </form>
+                <form method="post" asp-controller="User" asp-action="UserAccount">
+                    <input type="submit" value="Account" />
+                </form>
+            }
+            else
+            {
+                <a asp-controller="User" asp-action="Login">Login</a>
+                <a asp-controller="User" asp-action="Register">Register</a>
+            }
+        </div>
+
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
