@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using UserImagesData;
 using UserImagesService;
 using UserImagesWeb.Models;
@@ -40,7 +41,7 @@ namespace UserImagesWeb.Controllers
                 {
                     user = new User { Email = model.Email, Password = model.Password, UserName = model.LastName + " " + model.FirstName };
 
-                    Role userRole = roleService.GetRoles().Where(p => p.Name == "user").FirstOrDefault();
+                    Role userRole = roleService.FindByCondition(p => p.Name == "user").FirstOrDefault();
                     if (userRole != null)
                     {
                         user.Role = userRole;

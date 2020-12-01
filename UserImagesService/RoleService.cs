@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using UserImagesData;
 using UserImagesRepo;
@@ -15,7 +17,7 @@ namespace UserImagesService
             this.roleRepository = roleRepository;
         }
 
-        public IEnumerable<Role> GetRoles()
+        public IQueryable<Role> GetRoles()
         {
             return roleRepository.GetAll();
         }
@@ -25,6 +27,10 @@ namespace UserImagesService
             return roleRepository.Get(id);
         }
 
+        public IQueryable<Role> FindByCondition(Expression<Func<Role, bool>> expression)
+        {
+            return roleRepository.FindByCondition(expression);
+        }
         public void InsertRole(Role role)
         {
             roleRepository.Insert(role);
