@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using UserImagesData;
 using UserImagesRepo;
@@ -13,7 +15,7 @@ namespace UserImagesService
         {
             this.imageRepository = imageRepository;
         }
-        public IEnumerable<Image> GetImages()
+        public IQueryable<Image> GetImages()
         {
             return imageRepository.GetAll();
         }
@@ -21,6 +23,11 @@ namespace UserImagesService
         public Image GetImage(long id)
         {
             return imageRepository.Get(id);
+        }
+
+        public IQueryable<Image> FindImageByCondition(Expression<Func<Image, bool>> expression)
+        {
+            return imageRepository.FindByCondition(expression);
         }
 
         public void InsertImage(Image image)

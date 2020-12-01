@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using UserImagesData;
 
@@ -18,15 +19,21 @@ namespace UserImagesRepo
             this.context = context;
             entities = context.Set<T>();
         }
-        public IEnumerable<T> GetAll()
+        public IQueryable<T> GetAll()
         {
-            return entities.AsEnumerable();
+            return entities.AsQueryable();
         }
 
         public T Get(long id)
         {
             return entities.SingleOrDefault(s => s.Id == id);
         }
+
+        public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression)
+        {
+            return entities.Where(expression);
+        }
+
         public void Insert(T entity)
         {
             if (entity == null)
