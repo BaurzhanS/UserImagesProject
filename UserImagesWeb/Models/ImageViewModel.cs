@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,13 @@ namespace UserImagesWeb.Models
 {
     public class ImageViewModel
     {
+        [HiddenInput]
+        public int Id { get; set; }
+
+        public string Name { get; set; }
+
         public IFormFile Avatar { get; set; }
+
+        public string UserEmail { get; set; }
     }
 }

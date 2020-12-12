@@ -1,0 +1,23 @@
+﻿@model UserImagesWeb.Models.ImageViewModel
+
+@{
+    ViewBag.Title = "Редактирование аватарки";
+}
+<form asp-action="Edit" asp-controller="Image" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+    <p>
+        <label>Имя</label>
+        <input name="Name" class="form-control" asp-for="Name" />
+    </p>
+    <p>
+        <label>Аватар</label>
+        <input name="Avatar" type="file" class="form-control" asp-for="Avatar" />
+    </p>
+    <p>
+        <label>Email Пользователя</label>
+        <input name="UserEmail" class="form-control" asp-for="UserEmail" />
+    </p>
+    <p>
+        <input type="submit" value="Сохранить" />
+    </p>
+</form>

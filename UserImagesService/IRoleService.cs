@@ -12,8 +12,9 @@ namespace UserImagesService
         IQueryable<Role> GetRoles();
         Role GetRole(long id);
         IQueryable<Role> FindByCondition(Expression<Func<Role, bool>> expression);
-        void InsertRole(Role user);
-        void UpdateRole(Role user);
+        void InsertRole(Role role);
+        void UpdateRole(Role role);
         void DeleteRole(long id);
     }
+
 }

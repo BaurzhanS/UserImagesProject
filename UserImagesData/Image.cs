@@ -4,10 +4,12 @@ using System.Text;
 
 namespace UserImagesData
 {
-    public class Image: BaseEntity
+    public class Image : BaseEntity
     {
-        public byte[] Name { get; set; }
+        public string Name { get; set; }
+        public byte[] Avatar { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
+        public bool IsApproved { get; set; }
     }
 }

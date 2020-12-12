@@ -1,0 +1,49 @@
+﻿@model IEnumerable<UserImagesData.User>
+
+
+@{
+    ViewData["Title"] = "Роли";
+}
+
+<h2>Роли</h2>
+
+<p>
+    <a asp-action="CreateUser">Добавить пользователя</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Role.Name)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Role.Name)
+            </td>
+            <td>
+                <a asp-action="EditRole" asp-route-id="@item.Id">Редактировать</a> |
+                <a asp-action="DeleteRole" asp-route-id="@item.Id">Удалить</a>
+            </td>
+        </tr>
+        }
+
+    </tbody>
+</table>
