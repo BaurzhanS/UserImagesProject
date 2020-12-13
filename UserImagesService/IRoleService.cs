@@ -10,11 +10,11 @@ namespace UserImagesService
     public interface IRoleService
     {
         IQueryable<Role> GetRoles();
-        Role GetRole(long id);
+        Role GetRole(int id);
         IQueryable<Role> FindByCondition(Expression<Func<Role, bool>> expression);
         void InsertRole(Role role);
         void UpdateRole(Role role);
-        void DeleteRole(long id);
+        void DeleteRole(int id);
     }
 
 }

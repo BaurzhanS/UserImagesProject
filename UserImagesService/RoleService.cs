@@ -22,7 +22,7 @@ namespace UserImagesService
             return roleRepository.GetAll();
         }
 
-        public Role GetRole(long id)
+        public Role GetRole(int id)
         {
             return roleRepository.Get(id);
         }
@@ -40,7 +40,7 @@ namespace UserImagesService
             roleRepository.Update(role);
         }
 
-        public void DeleteRole(long id)
+        public void DeleteRole(int id)
         {
             Role role = GetRole(id);
             roleRepository.Remove(role);

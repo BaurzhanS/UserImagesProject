@@ -11,11 +11,11 @@ namespace UserImagesService
     public interface IImageService
     {
         IQueryable<Image> GetImages();
-        Image GetImage(long id);
+        Image GetImage(int id);
         IQueryable<Image> FindImageByCondition(Expression<Func<Image, bool>> expression);
         void InsertImage(Image image);
         void UpdateImage(Image image);
-        void DeleteImage(long id);
+        void DeleteImage(int id);
     }
 
 }

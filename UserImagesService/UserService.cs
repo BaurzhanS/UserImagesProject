@@ -22,7 +22,7 @@ namespace UserImagesService
             return userRepository.GetAll();
         }
 
-        public User GetUser(long id)
+        public User GetUser(int id)
         {
             return userRepository.Get(id);
         }
@@ -41,7 +41,7 @@ namespace UserImagesService
             userRepository.Update(user);
         }
 
-        public void DeleteUser(long id)
+        public void DeleteUser(int id)
         {
             User user = GetUser(id);
             userRepository.Remove(user);

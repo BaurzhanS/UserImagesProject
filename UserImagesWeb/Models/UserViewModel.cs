@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace UserImagesWeb.Models
 {
-    public class UserRegisterViewModel
+    public class UserViewModel
     {
         [HiddenInput]
         public int Id { get; set; }

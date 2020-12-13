@@ -20,7 +20,7 @@ namespace UserImagesService
             return imageRepository.GetAll();
         }
 
-        public Image GetImage(long id)
+        public Image GetImage(int id)
         {
             return imageRepository.Get(id);
         }
@@ -39,7 +39,7 @@ namespace UserImagesService
             imageRepository.Update(image);
         }
 
-        public void DeleteImage(long id)
+        public void DeleteImage(int id)
         {
             Image image = GetImage(id);
             imageRepository.Remove(image);

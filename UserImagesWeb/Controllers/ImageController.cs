@@ -66,7 +66,7 @@ namespace UserImagesWeb.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit(long? id)
+        public IActionResult Edit(int? id)
         {
             var imageViewModel = new ImageViewModel();
 

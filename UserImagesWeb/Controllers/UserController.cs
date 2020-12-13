@@ -32,21 +32,24 @@ namespace UserImagesWeb.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(UserRegisterViewModel model)
+        public async Task<IActionResult> Register(UserViewModel model)
         {
             if (ModelState.IsValid)
             {
-                User user = userService.FindByCondition(p=>p.Email==model.Email).FirstOrDefault();
+                User user = userService.FindByCondition(p => p.Email == model.Email).FirstOrDefault();
                 if (user == null)
                 {
                     user = new User { Email = model.Email, Password = model.Password, UserName = model.LastName + " " + model.FirstName };
 
                     Role userRole = roleService.FindByCondition(p => p.Name == "user").FirstOrDefault();
-                    if (userRole != null)
+
+                    if (userRole == null)
                     {
-                        user.Role = userRole;
-                        user.RoleId = userRole.Id;
+                        throw new Exception("There is no user role (admin must add it)");
                     }
+
+                    user.Role = userRole;
+                    user.RoleId = userRole.Id;
 
                     userService.InsertUser(user);
 
@@ -72,13 +75,15 @@ namespace UserImagesWeb.Controllers
             {
                 User user = userService.GetUser(model.Id);
 
-                if (user != null)
+                if (user == null)
                 {
-                    await Authenticate(user);
-
-                    return RedirectToAction("Index", "Home");
+                    throw new Exception("There is no such user");
                 }
-                ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+
+                await Authenticate(user);
+
+                return RedirectToAction("Index", "Home");
+
             }
             return View(model);
         }

@@ -20,6 +20,48 @@ namespace UserImagesWeb.Controllers
             this.userService = userService;
             this.roleService = roleService;
         }
+
+        public IActionResult RegisterAdmin()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult RegisterAdmin(UserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                User user = userService.FindByCondition(p => p.Email == model.Email).Include(p => p.Role).
+                    FirstOrDefault(p => p.Role.Name == "admin");
+
+                if (user != null)
+                {
+                    throw new Exception("Admin already exists");
+                }
+
+                if (user == null)
+                {
+                    user = new User { Email = model.Email, Password = model.Password, UserName = model.LastName + " " + model.FirstName };
+
+                    Role userRole = roleService.FindByCondition(p => p.Name == "admin").FirstOrDefault();
+
+                    if (userRole == null)
+                    {
+                        throw new Exception("There is no user role (admin must add it)");
+                    }
+
+                    user.Role = userRole;
+                    user.RoleId = userRole.Id;
+
+                    userService.InsertUser(user);
+
+                    return RedirectToAction("UsersList");
+                }
+                else
+                    ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+            }
+            return View(model);
+        }
         public IActionResult RoleList()
         {
             var roles = roleService.GetRoles();
@@ -51,6 +93,68 @@ namespace UserImagesWeb.Controllers
             var users = userService.GetUsers().Include(p => p.Role);
 
             return View(users);
+        }
+
+        [HttpGet]
+        public IActionResult EditUser(int? id)
+        {
+            var userViewModel = new UserUpdateViewModel();
+
+            var user = userService.GetUser(id.Value);
+
+            var userRole = roleService.GetRole(user.RoleId.Value);
+
+            if (userRole == null)
+            {
+                throw new Exception("No role exists with this id");
+            }
+
+            if (user == null)
+            {
+                throw new Exception("No user exists with this email");
+            }
+
+            userViewModel.Email = user.Email;
+            userViewModel.FullName = user.UserName;
+            userViewModel.RoleName = userRole.Name;
+            userViewModel.Password = user.Password;
+
+            return View("EditUser", userViewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(UserUpdateViewModel model)
+        {
+            var user = userService.FindByCondition(p => p.Email == model.Email).FirstOrDefault();
+
+            if (user == null)
+            {
+                throw new Exception("No user exists with this email");
+            }
+
+            var userRole = roleService.FindByCondition(p => p.Name == model.RoleName).FirstOrDefault();
+            user.Email = model.Email;
+            user.UserName = model.FullName;
+            user.RoleId = userRole.Id;
+
+            userService.UpdateUser(user);
+            return RedirectToAction("UsersList");
+        }
+
+        [HttpGet]
+        public IActionResult Delete(int? id)
+        {
+            var user = userService.GetUser(id.Value);
+
+            if (user == null)
+            {
+                throw new Exception("No user exists with this email");
+            }
+
+            userService.DeleteUser(user.Id);
+
+            return RedirectToAction("UsersList");
         }
     }
 }
