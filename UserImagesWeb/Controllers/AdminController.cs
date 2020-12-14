@@ -119,12 +119,12 @@ namespace UserImagesWeb.Controllers
             userViewModel.RoleName = userRole.Name;
             userViewModel.Password = user.Password;
 
-            return View("EditUser", userViewModel);
+            return View(userViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(UserUpdateViewModel model)
+        public IActionResult EditUser(UserUpdateViewModel model)
         {
             var user = userService.FindByCondition(p => p.Email == model.Email).FirstOrDefault();
 
@@ -143,7 +143,7 @@ namespace UserImagesWeb.Controllers
         }
 
         [HttpGet]
-        public IActionResult Delete(int? id)
+        public IActionResult DeleteUser(int? id)
         {
             var user = userService.GetUser(id.Value);
 

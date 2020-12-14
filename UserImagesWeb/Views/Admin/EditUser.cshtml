@@ -1,4 +1,4 @@
-﻿@model UserImagesWeb.Models.UserViewModel
+﻿@model UserImagesWeb.Models.UserUpdateViewModel
 
 <h2>Регистрация</h2>
 
@@ -6,14 +6,14 @@
     <div class="validation" asp-validation-summary="ModelOnly"></div>
     <div>
         <div>
-            <label asp-for="LastName">Фамилия</label><br />
-            <input type="text" asp-for="LastName" />
-            <span asp-validation-for="LastName" />
+            <label asp-for="FullName">Фамилия Имя</label><br />
+            <input type="text" asp-for="FullName" />
+            <span asp-validation-for="FullName" />
         </div>
         <div>
-            <label asp-for="FirstName">Имя</label><br />
-            <input type="text" asp-for="FirstName" />
-            <span asp-validation-for="FirstName" />
+            <label asp-for="RoleName">Роль</label><br />
+            <input type="text" asp-for="RoleName" />
+            <span asp-validation-for="RoleName" />
         </div>
         <div>
             <label asp-for="Email">Введите Email</label><br />
@@ -26,12 +26,7 @@
             <span asp-validation-for="Password" />
         </div>
         <div>
-            <label asp-for="ConfirmPassword">Повторите пароль</label><br />
-            <input asp-for="ConfirmPassword" />
-            <span asp-validation-for="ConfirmPassword" />
-        </div>
-        <div>
-            <input type="submit" value="Регистрация" />
+            <input type="submit" value="Сохранить" />
         </div>
     </div>
 </form>
