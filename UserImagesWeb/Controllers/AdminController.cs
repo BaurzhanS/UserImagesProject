@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using UserImagesData;
 using UserImagesService;
@@ -114,10 +115,15 @@ namespace UserImagesWeb.Controllers
                 throw new Exception("No user exists with this email");
             }
 
+            userViewModel.UserId = user.Id;
             userViewModel.Email = user.Email;
             userViewModel.FullName = user.UserName;
-            userViewModel.RoleName = userRole.Name;
             userViewModel.Password = user.Password;
+            userViewModel.RoleId = user.RoleId.Value;
+
+            var userRoles = new SelectList(roleService.GetRoles().ToList(), "Id", "Name");
+
+            ViewBag.Roles = userRoles;
 
             return View(userViewModel);
         }
@@ -126,14 +132,14 @@ namespace UserImagesWeb.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult EditUser(UserUpdateViewModel model)
         {
-            var user = userService.FindByCondition(p => p.Email == model.Email).FirstOrDefault();
+            var user = userService.FindByCondition(p => p.Id == model.UserId).FirstOrDefault();
 
             if (user == null)
             {
                 throw new Exception("No user exists with this email");
             }
 
-            var userRole = roleService.FindByCondition(p => p.Name == model.RoleName).FirstOrDefault();
+            var userRole = roleService.FindByCondition(p => p.Id == model.RoleId).FirstOrDefault();
             user.Email = model.Email;
             user.UserName = model.FullName;
             user.RoleId = userRole.Id;

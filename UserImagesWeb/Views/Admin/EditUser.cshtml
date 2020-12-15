@@ -2,18 +2,21 @@
 
 <h2>Регистрация</h2>
 
-<form asp-action="RegisterAdmin" asp-controller="Admin" asp-anti-forgery="true">
+<form asp-action="EditUser" asp-controller="Admin" asp-anti-forgery="true">
     <div class="validation" asp-validation-summary="ModelOnly"></div>
     <div>
+        <div>
+            <input type="hidden" asp-for="UserId" />
+        </div>
         <div>
             <label asp-for="FullName">Фамилия Имя</label><br />
             <input type="text" asp-for="FullName" />
             <span asp-validation-for="FullName" />
         </div>
         <div>
-            <label asp-for="RoleName">Роль</label><br />
-            <input type="text" asp-for="RoleName" />
-            <span asp-validation-for="RoleName" />
+            <label asp-for="RoleId">Роль</label><br />
+            <select asp-for="RoleId" asp-items="ViewBag.Roles"></select>
+            <span asp-validation-for="RoleId" />
         </div>
         <div>
             <label asp-for="Email">Введите Email</label><br />

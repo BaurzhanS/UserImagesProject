@@ -58,8 +58,6 @@ namespace UserImagesWeb.Controllers
                 image.UserId = user.Id;
 
                 imageService.InsertImage(image);
-
-
             }
 
             return RedirectToAction("Index");
@@ -68,7 +66,7 @@ namespace UserImagesWeb.Controllers
         [HttpGet]
         public IActionResult Edit(int? id)
         {
-            var imageViewModel = new ImageViewModel();
+            var imageUpdateViewModel = new ImageUpdateViewModel();
 
             var image = imageService.GetImage(id.Value);
 
@@ -84,21 +82,22 @@ namespace UserImagesWeb.Controllers
                 throw new Exception("No user exists with this image");
             }
 
-            imageViewModel.UserEmail = user.Email;
-            imageViewModel.Name = image.Name;
+            imageUpdateViewModel.UserEmail = user.Email;
+            imageUpdateViewModel.Name = image.Name;
+            imageUpdateViewModel.Image = image.Avatar;
 
-            using (var stream = new MemoryStream(image.Avatar))
-            {
-                var file = new FormFile(stream, 0, stream.Length, null, null);
-                imageViewModel.Avatar = file;
-            }
+            //using (var stream = new MemoryStream(image.Avatar))
+            //{
+            //    var file = new FormFile(stream, 0, stream.Length, null, null);
+            //    imageUpdateViewModel.Avatar = file;
+            //}
 
-            return View("Edit", imageViewModel);
+            return View("Edit", imageUpdateViewModel);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(ImageViewModel model)
+        public IActionResult Edit(ImageUpdateViewModel model)
         {
             var image = imageService.GetImage(model.Id);
 
