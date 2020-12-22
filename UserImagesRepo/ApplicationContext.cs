@@ -17,6 +17,7 @@ namespace UserImagesRepo
             new UserMap(modelBuilder.Entity<User>());
             new RoleMap(modelBuilder.Entity<Role>());
             new ImageMap(modelBuilder.Entity<Image>());
+            new NotificationMap(modelBuilder.Entity<Notification>());
         }
     }
 }

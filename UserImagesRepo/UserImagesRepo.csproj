@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20201222092016_Notification.cs" />
+    <Compile Remove="Migrations\20201222092016_Notification.Designer.cs" />
+    <Compile Remove="Migrations\20201222093033_Notification.cs" />
+    <Compile Remove="Migrations\20201222093033_Notification.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.10">
       <PrivateAssets>all</PrivateAssets>

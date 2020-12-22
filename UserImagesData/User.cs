@@ -12,9 +12,11 @@ namespace UserImagesData
         public int? RoleId { get; set; }
         public Role Role { get; set; }
         public List<Image> Images { get; set; }
+        public List<Notification> Notifications { get; set; }
         public User()
         {
             Images = new List<Image>();
+            Notifications = new List<Notification>();
         }
     }
 }
