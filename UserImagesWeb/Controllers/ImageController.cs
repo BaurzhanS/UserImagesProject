@@ -16,11 +16,13 @@ namespace UserImagesWeb.Controllers
     {
         private readonly IImageService imageService;
         private readonly IUserService userService;
+        private readonly INotificationService notificationService;
 
-        public ImageController(IImageService imageService, IUserService userService)
+        public ImageController(IImageService imageService, IUserService userService, INotificationService notificationService)
         {
             this.imageService = imageService;
             this.userService = userService;
+            this.notificationService = notificationService;
         }
         public IActionResult Index()
         {
@@ -58,6 +60,14 @@ namespace UserImagesWeb.Controllers
                 image.UserId = user.Id;
 
                 imageService.InsertImage(image);
+
+                //var notification = new NotificationViewModel();
+                var notification = new Notification();
+                notification.Message = $"Пользователь {user.Email} загрузил аватарку {image.Name}";
+                notification.UserId = user.Id;
+                notification.ImageId = image.Id;
+
+                notificationService.InsertNotification(notification);
             }
 
             return RedirectToAction("Index");
@@ -85,12 +95,6 @@ namespace UserImagesWeb.Controllers
             imageUpdateViewModel.UserEmail = user.Email;
             imageUpdateViewModel.Name = image.Name;
             imageUpdateViewModel.Image = image.Avatar;
-
-            //using (var stream = new MemoryStream(image.Avatar))
-            //{
-            //    var file = new FormFile(stream, 0, stream.Length, null, null);
-            //    imageUpdateViewModel.Avatar = file;
-            //}
 
             return View("Edit", imageUpdateViewModel);
         }

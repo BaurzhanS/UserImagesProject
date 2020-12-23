@@ -15,11 +15,13 @@ namespace UserImagesWeb.Controllers
     {
         private readonly IUserService userService;
         private readonly IRoleService roleService;
+        private readonly INotificationService notificationService;
 
-        public AdminController(IRoleService roleService, IUserService userService)
+        public AdminController(IRoleService roleService, IUserService userService, INotificationService notificationService)
         {
             this.userService = userService;
             this.roleService = roleService;
+            this.notificationService = notificationService;
         }
 
         public IActionResult RegisterAdmin()
@@ -161,6 +163,24 @@ namespace UserImagesWeb.Controllers
             userService.DeleteUser(user.Id);
 
             return RedirectToAction("UsersList");
+        }
+
+        [HttpGet]
+        public IActionResult NotificationsList()
+        {
+            var notifications = notificationService.FindNotificationByCondition(p=>p.IsRead == false).Include(p => p.Image).Include(p=>p.User);
+
+            return View(notifications);
+        }
+
+        [HttpGet]
+        public IActionResult ReadNotification(int? id)
+        {
+            var notification = notificationService.GetNotification(id.Value);
+            notification.IsRead = true;
+            notificationService.UpdateNotification(notification);
+
+            return RedirectToAction("NotificationsList");
         }
     }
 }

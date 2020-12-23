@@ -12,6 +12,7 @@ namespace UserImagesData
         {
             entityBuilder.HasKey(t => t.Id);
             entityBuilder.Property(t => t.Name).IsRequired();
+            entityBuilder.HasIndex(t => t.Name).IsUnique();
             entityBuilder.HasOne(t => t.User).WithMany(p => p.Images).HasForeignKey(t => t.UserId);
             entityBuilder.Property(t => t.IsApproved).HasDefaultValue(false);
         }

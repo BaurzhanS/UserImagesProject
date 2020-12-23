@@ -11,6 +11,7 @@ namespace UserImagesData
         {
             entityBuilder.HasKey(t => t.Id);
             entityBuilder.Property(t => t.Email).IsRequired();
+            entityBuilder.HasIndex(t => t.Email).IsUnique();
             entityBuilder.Property(t => t.Password).IsRequired();
             entityBuilder.HasOne(t => t.Role).WithMany(p => p.Users).HasForeignKey(p => p.RoleId);
         }

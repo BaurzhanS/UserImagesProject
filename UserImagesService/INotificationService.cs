@@ -13,8 +13,8 @@ namespace UserImagesService
         IQueryable<Notification> GetNotifications();
         Notification GetNotification(int id);
         IQueryable<Notification> FindNotificationByCondition(Expression<Func<Notification, bool>> expression);
-        void InsertNotification(Notification image);
-        void UpdateNotification(Notification image);
+        void InsertNotification(Notification notification);
+        void UpdateNotification(Notification notification);
         void DeleteNotification(int id);
     }
 }
