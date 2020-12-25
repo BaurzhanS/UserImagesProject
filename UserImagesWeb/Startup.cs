@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using UserImagesRepo;
 using UserImagesService;
+using UserImagesWeb.Services;
 
 namespace UserImagesWeb
 {
@@ -29,6 +30,7 @@ namespace UserImagesWeb
         {
             string connection = "Server=(localdb)\\MSSQLLocalDB;Database=UserImagesDb;Trusted_Connection=True;";
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(connection));
+            services.AddSignalR();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
@@ -69,6 +71,8 @@ namespace UserImagesWeb
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapHub<ChatHub>("/chat");
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");

@@ -16,12 +16,14 @@ namespace UserImagesWeb.Controllers
         private readonly IUserService userService;
         private readonly IRoleService roleService;
         private readonly INotificationService notificationService;
+        private readonly IImageService imageService;
 
-        public AdminController(IRoleService roleService, IUserService userService, INotificationService notificationService)
+        public AdminController(IRoleService roleService, IUserService userService, INotificationService notificationService, IImageService imageService)
         {
             this.userService = userService;
             this.roleService = roleService;
             this.notificationService = notificationService;
+            this.imageService = imageService;
         }
 
         public IActionResult RegisterAdmin()
@@ -181,6 +183,20 @@ namespace UserImagesWeb.Controllers
             notificationService.UpdateNotification(notification);
 
             return RedirectToAction("NotificationsList");
+        }
+
+        [HttpGet]
+        public IActionResult ImagesToApprove()
+        {
+            var images = imageService.FindImageByCondition(p=>p.IsApproved==false).Include(p => p.User);
+            return View(images);
+        }
+
+        [HttpGet]
+        public IActionResult ApproveImage(int? id)
+        {
+            var images = imageService.FindImageByCondition(p => p.IsApproved == false).Include(p => p.User);
+            return View(images);
         }
     }
 }

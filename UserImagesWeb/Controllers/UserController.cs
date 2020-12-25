@@ -73,7 +73,7 @@ namespace UserImagesWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = userService.GetUser(model.Id);
+                User user = userService.FindByCondition(p=>p.Email==model.Email).FirstOrDefault();
 
                 if (user == null)
                 {
