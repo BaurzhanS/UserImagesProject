@@ -18,7 +18,18 @@ namespace UserImagesWeb.Services
 
         public async Task Send(string userEmail)
         {
-            var users = userService.GetUsers();
+            //var user = userService.FindByCondition(p=>p.Email==userEmail).FirstOrDefault();
+
+            //if(user==null) throw new Exception("There is no such user");
+
+            await this.Clients.All.SendAsync("Send", userEmail);
+        }
+
+        public async Task SendEmail(string userEmail)
+        {
+            //var user = userService.FindByCondition(p=>p.Email==userEmail).FirstOrDefault();
+
+            //if(user==null) throw new Exception("There is no such user");
 
             await this.Clients.All.SendAsync("Send", userEmail);
         }

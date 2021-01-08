@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using UserImagesData;
 using UserImagesService;
 using UserImagesWeb.Models;
+using UserImagesWeb.Services;
 
 namespace UserImagesWeb.Controllers
 {
@@ -17,13 +18,15 @@ namespace UserImagesWeb.Controllers
         private readonly IRoleService roleService;
         private readonly INotificationService notificationService;
         private readonly IImageService imageService;
+        private readonly ChatHub chatHub;
 
-        public AdminController(IRoleService roleService, IUserService userService, INotificationService notificationService, IImageService imageService)
+        public AdminController(IRoleService roleService, IUserService userService, INotificationService notificationService, IImageService imageService, ChatHub chatHub)
         {
             this.userService = userService;
             this.roleService = roleService;
             this.notificationService = notificationService;
             this.imageService = imageService;
+            this.chatHub = chatHub;
         }
 
         public IActionResult RegisterAdmin()
@@ -193,10 +196,15 @@ namespace UserImagesWeb.Controllers
         }
 
         [HttpGet]
-        public IActionResult ApproveImage(int? id)
+        public async Task<IActionResult> ApproveImage(int? id)
         {
-            var images = imageService.FindImageByCondition(p => p.IsApproved == false).Include(p => p.User);
-            return View(images);
+            var image = imageService.FindImageByCondition(p => p.IsApproved == false && p.Id == id).Include(p => p.User).FirstOrDefault();
+
+            if (image != null)
+            {
+                await chatHub.SendEmail(image.User.Email);
+            }
+            return Ok();
         }
     }
 }

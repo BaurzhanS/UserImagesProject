@@ -38,7 +38,7 @@
                     <input type="submit" value="Logout" />
                 </form>
                 <form method="post" asp-controller="User" asp-action="UserAccount">
-                    <input type="submit" value="IndividualAccount" />
+                    <input type="submit" value="UserAccount" />
                 </form>
             }
             else
@@ -50,6 +50,7 @@
                 <a asp-controller="Admin" asp-action="UsersList">Users</a>
                 <a asp-controller="Admin" asp-action="RegisterAdmin">Create Admin</a>
                 <a asp-controller="Admin" asp-action="NotificationsList">Notifications</a>
+                <a asp-controller="Admin" asp-action="ImagesToApprove">Images to Approve</a>
             }
         </div>
 

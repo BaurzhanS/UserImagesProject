@@ -73,7 +73,7 @@ namespace UserImagesWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = userService.FindByCondition(p=>p.Email==model.Email).FirstOrDefault();
+                User user = userService.FindByCondition(p=>p.Email==model.Email).Include(p=>p.Role).FirstOrDefault();
 
                 if (user == null)
                 {
@@ -100,8 +100,9 @@ namespace UserImagesWeb.Controllers
         [Authorize(Roles = "admin, user")]
         public IActionResult UserAccount()
         {
-            string userName = HttpContext.User.Identity.Name;
-            return View((object)userName);
+            string userEmail = HttpContext.User.Identity.Name;
+            var user = userService.FindByCondition(p => p.Email == userEmail).Include(p => p.Role).Include(p=>p.Images).FirstOrDefault();
+            return View(user);
         }
 
         private async Task Authenticate(User user)
