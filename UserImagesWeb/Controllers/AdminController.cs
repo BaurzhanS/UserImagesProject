@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using UserImagesData;
 using UserImagesService;
@@ -18,15 +19,17 @@ namespace UserImagesWeb.Controllers
         private readonly IRoleService roleService;
         private readonly INotificationService notificationService;
         private readonly IImageService imageService;
-        private readonly ChatHub chatHub;
+        private readonly IHubContext<NotificationUserHub> notificationUserHubContext;
+        private readonly IUserConnectionManager userConnectionManager;
 
-        public AdminController(IRoleService roleService, IUserService userService, INotificationService notificationService, IImageService imageService, ChatHub chatHub)
+        public AdminController(IRoleService roleService, IUserService userService, INotificationService notificationService, IImageService imageService, IHubContext<NotificationUserHub> notificationUserHubContext, IUserConnectionManager userConnectionManager)
         {
             this.userService = userService;
             this.roleService = roleService;
             this.notificationService = notificationService;
             this.imageService = imageService;
-            this.chatHub = chatHub;
+            this.notificationUserHubContext = notificationUserHubContext;
+            this.userConnectionManager = userConnectionManager;
         }
 
         public IActionResult RegisterAdmin()
@@ -173,7 +176,7 @@ namespace UserImagesWeb.Controllers
         [HttpGet]
         public IActionResult NotificationsList()
         {
-            var notifications = notificationService.FindNotificationByCondition(p=>p.IsRead == false).Include(p => p.Image).Include(p=>p.User);
+            var notifications = notificationService.FindNotificationByCondition(p => p.IsRead == false).Include(p => p.Image).Include(p => p.User);
 
             return View(notifications);
         }
@@ -191,7 +194,7 @@ namespace UserImagesWeb.Controllers
         [HttpGet]
         public IActionResult ImagesToApprove()
         {
-            var images = imageService.FindImageByCondition(p=>p.IsApproved==false).Include(p => p.User);
+            var images = imageService.FindImageByCondition(p => p.IsApproved == false).Include(p => p.User);
             return View(images);
         }
 
@@ -200,11 +203,38 @@ namespace UserImagesWeb.Controllers
         {
             var image = imageService.FindImageByCondition(p => p.IsApproved == false && p.Id == id).Include(p => p.User).FirstOrDefault();
 
-            if (image != null)
+            if (image is null)
             {
-                await chatHub.SendEmail(image.User.Email);
+                throw new Exception("Image is not found");
             }
+
+            //image.IsApproved = true;
+            //imageService.UpdateImage(image);
+
+            var connections = userConnectionManager.GetUserConnections(image.UserId.ToString());
+            if (connections != null && connections.Count > 0)
+            {
+                foreach (var connectionId in connections)
+                {
+                    await notificationUserHubContext.Clients.Client(connectionId).SendAsync("sendToUser", "Test", "Test is done!");
+                }
+            }
+
             return Ok();
         }
+
+        //[HttpPost]
+        //public async Task<ActionResult> SendToSpecificUser(Article model)
+        //{
+        //    var connections = _userConnectionManager.GetUserConnections(model.userId);
+        //    if (connections != null && connections.Count > 0)
+        //    {
+        //        foreach (var connectionId in connections)
+        //        {
+        //            await _notificationUserHubContext.Clients.Client(connectionId).SendAsync("sendToUser", model.articleHeading, model.articleContent);
+        //        }
+        //    }
+        //    return View();
+        //}
     }
 }

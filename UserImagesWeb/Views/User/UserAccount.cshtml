@@ -51,30 +51,22 @@
     </tbody>
 </table>
 
-<div id="inputForm">
-    <input type="text" id="message" />
-    @*<input type="button" id="sendBtn" value="Отправить" />*@
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p id="user"></p>
+    <div id="articleList"></div>
 </div>
-<div id="chatroom"></div>
-<script src="js/microsoft/signalr/dist/browser/signalr.min.js"></script>
+<input type="text" id="signalRConnectionId" />
 <script>
-        const hubConnection = new signalR.HubConnectionBuilder()
-            .withUrl("/chat")
-            .build();
+    function ready() {
 
-        hubConnection.on("Send", function (data) {
+    }
+    //random number between 1 and 100 for demo
+    //var userId = Math.floor((Math.random() * 100) + 1);
+    var userId = @Model.Id;
+    document.addEventListener("DOMContentLoaded", ready);
 
-            let elem = document.createElement("p");
-            elem.appendChild(document.createTextNode(data));
-            let firstElem = document.getElementById("chatroom").firstChild;
-            document.getElementById("chatroom").insertBefore(elem, firstElem);
-
-        });
-
-        document.getElementById("sendBtn").addEventListener("click", function (e) {
-            let message = document.getElementById("message").value;
-            hubConnection.invoke("Send", message);
-        });
-
-        hubConnection.start();
+    document.getElementById("user").innerHTML = "UserId: " + userId;
 </script>
+<script src="~/js/microsoft/signalr/dist/browser/signalr.js"></script>
+<script src="/js/usernotification.js"></script>

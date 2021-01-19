@@ -6,7 +6,7 @@
       "library": "@microsoft/signalr@latest",
       "destination": "wwwroot/js/microsoft/signalr/",
       "files": [
-        "dist/browser/signalr.min.js"
+        "dist/browser/signalr.js"
       ]
     }
   ]

@@ -46,7 +46,8 @@ namespace UserImagesWeb
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<IImageService, ImageService>();
             services.AddTransient<INotificationService, NotificationService>();
-            services.AddTransient<ChatHub>();
+
+            services.AddSingleton<IUserConnectionManager, UserConnectionManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,7 +73,7 @@ namespace UserImagesWeb
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapHub<ChatHub>("/chat");
+                endpoints.MapHub<NotificationUserHub>("/NotificationUserHub");
 
                 endpoints.MapControllerRoute(
                     name: "default",
