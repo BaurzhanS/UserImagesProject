@@ -40,14 +40,20 @@ namespace UserImagesWeb.Services
                 }
             }
         }
+
         public List<string> GetUserConnections(string userId)
         {
             var conn = new List<string>();
-            lock (userConnectionMapLocker)
+
+            if (userConnectionMap.ContainsKey(userId))
             {
-                conn = userConnectionMap[userId];
+                lock (userConnectionMapLocker)
+                {
+                    conn = userConnectionMap[userId];
+                    return conn;
+                }
             }
-            return conn;
+            return null;
         }
     }
 }
