@@ -37,7 +37,7 @@
                 <form method="post" asp-controller="User" asp-action="Logout">
                     <input type="submit" value="Logout" />
                 </form>
-                <form method="post" asp-controller="User" asp-action="UserAccount">
+                <form method="get" asp-controller="User" asp-action="UserAccount">
                     <input type="submit" value="UserAccount" />
                 </form>
             }
@@ -58,7 +58,6 @@
             @RenderBody()
         </main>
     </div>
-
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2020 - UserImagesWeb - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>

@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using UserImagesData;
 using UserImagesService;
 using UserImagesWeb.Models;
+using UserImagesWeb.Services;
 
 namespace UserImagesWeb.Controllers
 {
@@ -18,11 +19,15 @@ namespace UserImagesWeb.Controllers
     {
         private readonly IUserService userService;
         private readonly IRoleService roleService;
+        private readonly INotificationService notificationService;
+        private readonly IUserConnectionManager userConnectionManager;
 
-        public UserController(IUserService userService, IRoleService roleService)
+        public UserController(IUserService userService, IRoleService roleService, INotificationService notificationService, IUserConnectionManager userConnectionManager)
         {
             this.userService = userService;
             this.roleService = roleService;
+            this.notificationService = notificationService;
+            this.userConnectionManager = userConnectionManager;
         }
 
         [HttpGet]
@@ -93,16 +98,26 @@ namespace UserImagesWeb.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
+
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpPost]
+        [HttpGet]
         [Authorize(Roles = "admin, user")]
         public IActionResult UserAccount()
         {
             string userEmail = HttpContext.User.Identity.Name;
             var user = userService.FindByCondition(p => p.Email == userEmail).Include(p => p.Role).Include(p=>p.Images).FirstOrDefault();
-            return View(user);
+
+            var notifications = notificationService.FindNotificationByCondition(p => p.UserId == user.Id && p.ToModerator == false && p.IsRead == false).ToList();
+
+            UserAccountViewModel userAccountViewModel = new UserAccountViewModel
+            {
+                User = user,
+                Notifications = notifications
+            };
+
+            return View(userAccountViewModel);
         }
 
         private async Task Authenticate(User user)
@@ -117,6 +132,16 @@ namespace UserImagesWeb.Controllers
                 ClaimsIdentity.DefaultRoleClaimType);
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+        }
+
+        [HttpGet]
+        public IActionResult ReadNotification(int? id)
+        {
+            var notification = notificationService.GetNotification(id.Value);
+            notification.IsRead = true;
+            notificationService.UpdateNotification(notification);
+
+            return RedirectToAction("UserAccount");
         }
     }
 }

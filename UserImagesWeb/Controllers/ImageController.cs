@@ -66,6 +66,7 @@ namespace UserImagesWeb.Controllers
                 notification.Message = $"Пользователь {user.Email} загрузил аватарку {image.Name}";
                 notification.UserId = user.Id;
                 notification.ImageId = image.Id;
+                notification.ToModerator = true;
 
                 notificationService.InsertNotification(notification);
             }

@@ -12,5 +12,6 @@ namespace UserImagesData
         public int? ImageId { get; set; }
         public Image Image { get; set; }
         public bool IsRead { get; set; }
+        public bool ToModerator { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿@model UserImagesData.User
+﻿@model UserAccountViewModel
 
 
 @{
@@ -14,16 +14,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.UserName)
+                @Html.DisplayNameFor(model => model.User.UserName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
+                @Html.DisplayNameFor(model => model.User.Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Role.Name)
+                @Html.DisplayNameFor(model => model.User.Role.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Images.FirstOrDefault().Avatar)
+                @Html.DisplayNameFor(model => model.User.Images.FirstOrDefault().Avatar)
             </th>
             <th></th>
         </tr>
@@ -31,15 +31,15 @@
     <tbody>
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => Model.UserName)
+                @Html.DisplayFor(modelItem => Model.User.UserName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => Model.Email)
+                @Html.DisplayFor(modelItem => Model.User.Email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => Model.Role.Name)
+                @Html.DisplayFor(modelItem => Model.User.Role.Name)
             </td>
-            @foreach (var item in Model.Images)
+            @foreach (var item in Model.User.Images)
             {
                 @*<tr>*@
                 <td>
@@ -48,6 +48,20 @@
                 @*</tr>*@
             }
         </tr>
+    </tbody>
+
+    <tbody>
+        @foreach (var item in Model.Notifications)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Message)
+            </td>
+            <td>
+                <a asp-controller="User" asp-action="ReadNotification" asp-route-id="@item.Id">Прочитать</a> |
+            </td>
+        </tr>
+        }
     </tbody>
 </table>
 
@@ -63,7 +77,7 @@
     }
     //random number between 1 and 100 for demo
     //var userId = Math.floor((Math.random() * 100) + 1);
-    var userId = @Model.Id;
+    var userId = @Model.User.Id;
     document.addEventListener("DOMContentLoaded", ready);
 
     document.getElementById("user").innerHTML = "UserId: " + userId;
